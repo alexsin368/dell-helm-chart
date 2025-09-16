@@ -20,6 +20,7 @@ charts/               # Source code for the Helm charts
 ├── apps/             # Charts for deploying applications
 │   ├── anythingllm/  # AnythingLLM application chart
 │   └── openwebui/    # OpenWebUI application chart
+│   └── ...           # Other application charts
 ```
 
 ## Available Charts
@@ -36,8 +37,9 @@ Application charts for deploying AI-powered applications:
 
 | Chart | Description | Version |
 |-------|-------------|---------|
-| **openwebui** | Modern, feature-rich web UI for Ollama and LLMs | 0.0.2 |
 | **anythingllm** | Open-source AI assistant with document management, memory, and chat capabilities | 0.0.2 |
+| **openwebui** | Modern, feature-rich web UI for Ollama and LLMs | 0.0.3 |
+| **enterpriseinference** | Open-source LLM serving stack built for Intel® Xeon® processors and Intel® Gaudi® AI Accelerators for cloud and on-premise environments | 0.0.1 |
 
 ## Installing Charts from the Repository
 
@@ -145,6 +147,7 @@ Each chart includes its own README with specific installation and configuration 
 - [Models Chart Documentation](./charts/models/README.md)
 - [AnythingLLM Chart Documentation](./charts/apps/anythingllm/README.md)
 - [OpenWebUI Chart Documentation](./charts/apps/openwebui/README.md)
+- [EnterpriseInference Chart Documentation](./charts/apps/enterpriseinference/README.md)
 
 ## Helm Repository Maintenance
 
@@ -195,11 +198,13 @@ Before pushing changes, always test your charts locally:
 $ helm lint charts/models
 $ helm lint charts/apps/anythingllm
 $ helm lint charts/apps/openwebui
+$ helm lint charts/apps/enterpriseinference
 
 # Test template rendering
 $ helm template charts/models
 $ helm template charts/apps/anythingllm
 $ helm template charts/apps/openwebui
+$ helm template charts/apps/enterpriseinference
 
 # Optional: Test installation in a development cluster
 $ helm install test-model ./charts/models --dry-run

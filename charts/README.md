@@ -28,8 +28,9 @@ Application charts for deploying AI-powered applications:
 
 | Chart | Description | Version |
 |-------|-------------|---------|
-| **openwebui** | Modern, feature-rich web UI for Ollama and LLMs | 0.0.2 |
 | **anythingllm** | Open-source AI assistant with document management, memory, and chat capabilities | 0.0.2 |
+| **openwebui** | Modern, feature-rich web UI for Ollama and LLMs | 0.0.3 |
+| **enterpriseinference** | Open-source LLM serving stack built for Intel® Xeon® processors and Intel® Gaudi® AI Accelerators for cloud and on-premise environments | 0.0.1 |
 
 ## Requirements
 
@@ -48,8 +49,9 @@ helm repo update
 
 # Install charts
 helm install llama3 deh/models
-helm install openwebui deh/openwebui
 helm install anythingllm deh/anythingllm
+helm install openwebui deh/openwebui
+helm install enterpriseinference deh/enterpriseinference
 ```
 
 ### From Local Source
@@ -73,3 +75,4 @@ For detailed installation instructions for each chart, please refer to their res
 - [Models Chart Documentation](./models/README.md)
 - [AnythingLLM Chart Documentation](./apps/anythingllm/README.md)
 - [OpenWebUI Chart Documentation](./apps/openwebui/README.md)
+- [EnterpriseInference Chart Documentation](./apps/enterpriseinference/README.md)

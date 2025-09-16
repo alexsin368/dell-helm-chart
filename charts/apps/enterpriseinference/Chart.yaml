@@ -1,0 +1,24 @@
+apiVersion: v2
+name: enterpriseinference
+description: EnterpriseInference - An open-source LLM serving stack built for Intel® Xeon® processors and Intel® Gaudi® AI Accelerators for cloud and on-premise environments
+type: application
+version: 0.0.1
+appVersion: "latest"
+maintainers:
+  - name: Dell
+home: https://github.com/opea-project/Enterprise-Inference
+sources:
+  - https://github.com/opea-project/Enterprise-Inference
+icon: https://avatars.githubusercontent.com/u/158137808?s=48&v=4
+keywords:
+  - kubernetes
+  - xeon
+  - gaudi
+  - vllm
+  - openai
+  - ingress
+  - nginx
+  - keycloak
+  - apisix
+  - prometheus
+  - grafana

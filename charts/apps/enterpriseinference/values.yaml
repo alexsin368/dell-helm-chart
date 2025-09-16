@@ -1,0 +1,55 @@
+## Global settings
+nameOverride: ""
+fullnameOverride: ""
+device: "hpu" # Options: hpu, cpu
+
+## Enterprise Inference Main Component Settings
+main:
+  enabled: true
+  
+  # User configurable options from app spec
+  config:
+    storageClassName: "gp2"  # Required: Storage class for the PVC
+    clusterUrl: "https://inference.dell.local"  # The base URL to host the inference endpoint
+    huggingFaceToken: "hf_xxxxx"  # Hugging Face token to access models
+    models: [1]  # A list of the model numbers from the list of pre-validated models 
+    target: "gaudi3"  # The target platform to deploy the model [cpu, gaudi2, gaudi3]
+
+  # User configurable secrets from app spec
+  secrets:
+    openaiApiKeys: ""        # Optional: OpenAI API keys (semicolon-separated)
+  
+  # Security context settings
+  securityContext:
+    enabled: true
+    fsGroup: 0
+    runAsUser: 0
+    runAsGroup: 0
+    runAsNonRoot: false
+  
+  service:
+    type: ClusterIP
+    port: 8080
+
+  resources:
+    hpu:
+      limits:
+        cpu: "64"
+        memory: "1024Gi"
+        habana.ai/gaudi: "8"
+      requests:
+        cpu: "40"
+        memory: "16Gi"
+        habana.ai/gaudi: "1"
+    cpu:
+      limits:
+        cpu: "64"
+        memory: "1024Gi"
+      requests:
+        cpu: "40"
+        memory: "16Gi"
+
+  persistence:
+    enabled: true
+    size: 10Gi
+    # storageClassName is set from config.storageClassName
