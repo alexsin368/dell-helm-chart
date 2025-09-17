@@ -25,9 +25,9 @@ helm repo update
 helm install enterprise-inference deh/enterpriseinference \
   --set main.config.storageClassName=gp2 \
   --set main.config.clusterUrl="https://inference.dell.local" \
-  --set main.config.huggingFaceToken="hf_xxxxx" \
   --set main.config.models=["1"] \
-  --set main.config.target="gaudi3"
+  --set main.config.target="gaudi3" \
+  --set main.secrets.huggingFaceToken="hf_xxxxx"
 ```
 
 ### From Local Source
@@ -42,8 +42,8 @@ helm install enterprise-inference ./charts/apps/enterpriseinference \
   --set main.config.storageClassName=gp2 \
   --set main.config.clusterUrl="https://inference.dell.local" \
   --set main.config.models=["1"] \
-  --set main.config.target="gaudi3"
-  --set main.secrets.huggingFaceToken="hf_xxxxx" \
+  --set main.config.target="gaudi3" \
+  --set main.secrets.huggingFaceToken="hf_xxxxx"
 ```
 
 > **Required:** The `main.config.storageClassName` parameter must be specified during installation, as it is required for the persistent volume claim.
