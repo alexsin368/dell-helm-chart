@@ -4,9 +4,53 @@ metadata:
   name: enterpriseinference-scripts
   namespace: {{ .Release.Namespace }}
 data:
-  clone-and-setup.sh: |
+  ei-setup.sh: |
     #!/bin/bash
     set -e
-    git clone --branch {{ .Values.main.upstream.branch }} {{ .Values.main.upstream.repository }} /workspace/repo
-    cp /workspace/repo/{{ .Values.main.upstream.configPath }} /workspace/config/inference-config.cfg
-    /workspace/repo/scripts/inference-stack-deploy.sh
+    
+    # SSH Key Setup - log in as a non-root user with sudo privileges to set up an SSH key to enable passwordless SSH
+    cd ~/.ssh
+    ssh-keygen -t rsa -b 4096
+    echo "{{ .Values.main.config.sshKeyName }}"
+    echo ""
+    cat ~/.ssh/{{ .Values.main.config.sshKeyName }}.pub > ~/.ssh/authorized_keys
+    chmod 600 {{ .Values.main.config.sshKeyName }}
+
+    # DNS and SSL/TLS Setup
+    echo "{{ .Values.main.config.ipAddress }} {{ .Values.main.config.clusterUrl}}" | sudo tee -a /etc/hosts > /dev/null
+    mkdir -p {{ .Values.main.config.certsPath }} && cd {{ .Values.main.config.certsPath }}
+    openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/CN={{ .Values.main.config.clusterUrl}}"
+    
+    # Clone the repository
+    cd ~
+    git clone --branch {{ .Values.main.upstream.branch }} {{ .Values.main.upstream.repository }}.git
+    cd Enterprise-Inference
+
+    # Configure the automation config file
+    cp -f docs/examples/single-node/inference-config.cfg core/inference-config.cfg
+    cat <<EOF > core/inference-config.cfg
+    cluster_url=api.example.com
+    cert_file={{ .Values.main.config.certsPath }}/{{ .Values.main.config.certFile }}
+    key_file={{ .Values.main.config.certsPath }}/{{ .Values.main.config.keyFile }}
+    keycloak_client_id={{ .Values.main.config.keycloakClientId }}
+    keycloak_admin_user={{ .Values.main.config.keycloakAdminUser }}
+    keycloak_admin_password={{ .Values.main.config.keycloakAdminPassword }}
+    deploy_kubernetes_fresh={{ .Values.main.config.deployKubernetesFresh }}
+    deploy_ingress_controller={{ .Values.main.config.deployIngressController }}
+    deploy_keycloak_apisix={{ .Values.main.config.deployKeycloakApisix }}
+    deploy_observability={{ .Values.main.config.deployObservability }}
+    deploy_llm_models={{ .Values.main.config.deployLlmModels }}
+    EOF
+
+    # Update the hosts.yaml file
+    cp -f docs/examples/single-node/hosts.yaml core/inventory/hosts.yaml
+    sed -i 's/ansible_user: ubuntu/ansible_user: $USER/' core/inventory/hosts.yaml
+
+    # Run the automation
+    cd core
+    chmod +x inference-stack-deploy.sh
+    export HUGGINGFACE_TOKEN={{ .Values.main.secrets.huggingFaceToken }}
+    ./inference-stack-deploy.sh --models {{ .Values.main.config.models }} --cpu-or-gpu {{ .Values.main.config.target }} --hugging-face-token $HUGGINGFACE_TOKEN
+    echo "1"
+    echo "yes"
+    

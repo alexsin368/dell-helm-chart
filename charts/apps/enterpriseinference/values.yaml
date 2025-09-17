@@ -9,10 +9,28 @@ main:
   
   # User configurable options from app spec
   config:
-    storageClassName: "gp2"  # Required: Storage class for the PVC
-    clusterUrl: "https://inference.dell.local"  # The base URL to host the inference endpoint
-    models: [1]  # A list of the model numbers from the list of pre-validated models 
-    target: "gaudi3"  # The target platform to deploy the model [cpu, gaudi2, gaudi3]
+    # General config
+      storageClassName: "gp2"  # Required: Storage class for the PVC
+      clusterUrl: "api.example.com"  # The base URL to host the inference endpoint
+      models: [1]  # A list of the model numbers from the list of pre-validated models
+      cpuOrGpu: "gaudi3"  # The target platform to deploy the model [cpu, gpu, gaudi2, gaudi3]
+
+      # Prerequisites config
+      sshKeyName: "id_rsa"  # Name of the SSH key pair
+      ipAddress: "127.0.0.1"  # IP address of the machine, default to localhost
+      certsPath: "~/certs"
+
+      # Inference deployment config
+      certFile: "cert.pem"
+      keyFile: "key.pem"
+      keycloakClientId: "api"
+      keycloakAdminUser: "api-admin"
+      keycloakAdminPassword: "changeme!!"
+      deployKubernetesFresh: "on"
+      deployIngressController: "on"
+      deployKeycloakApisix: "on"
+      deployObservability: "on"
+      deployLlmModels: "on"
 
   upstream:
    repository: "https://github.com/opea-project/Enterprise-Inference"
@@ -63,7 +81,7 @@ main:
 
 ## Model Serving Component Settings
 modelServing:
-  enabled: true
+  enabled: false
 
   # Service configuration
   service:

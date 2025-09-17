@@ -3,6 +3,9 @@ kind: Job
 metadata:
   name: enterpriseinference-setup
   namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded
 spec:
   template:
     spec:
@@ -10,7 +13,7 @@ spec:
       containers:
       - name: setup
         image: alpine/git
-        command: ["/bin/sh", "-c", "/scripts/clone-and-setup.sh"]
+        command: ["/bin/sh", "-c", "/scripts/ei-setup.sh"]
         volumeMounts:
         - name: scripts
           mountPath: /scripts
