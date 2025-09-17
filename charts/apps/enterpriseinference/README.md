@@ -41,9 +41,9 @@ cd dell-helm-chart
 helm install enterprise-inference ./charts/apps/enterpriseinference \
   --set main.config.storageClassName=gp2 \
   --set main.config.clusterUrl="https://inference.dell.local" \
-  --set main.config.huggingFaceToken="hf_xxxxx" \
   --set main.config.models=["1"] \
   --set main.config.target="gaudi3"
+  --set main.secrets.huggingFaceToken="hf_xxxxx" \
 ```
 
 > **Required:** The `main.config.storageClassName` parameter must be specified during installation, as it is required for the persistent volume claim.
@@ -69,10 +69,9 @@ The following table lists the configurable parameters for the Enterprise Inferen
 | `main.image.pullPolicy` | OpenWebUI image pull policy | `IfNotPresent` |
 | `main.config.storageClassName` | Storage class for persistent data (required) | `gp2` |
 | `main.config.clusterUrl` | The base URL to host the inference endpoint | `https://inference.dell.local` |
-| `main.config.huggingFaceToken` | Hugging Face token to access models | `hf_xxxxx` |
 | `main.config.models` | A list of the model numbers from the list of pre-validated models | `[1]` |
 | `main.config.target` | The target platform to deploy the model | `gaudi3` |
-| `main.secrets.openaiApiKeys` | OpenAI API keys (semicolon-separated) | `""` |
+| `main.secrets.huggingFaceToken` | Hugging Face token to access models | `hf_xxxxx` |
 | `main.service.type` | Service type for the main component | `ClusterIP` |
 | `main.service.port` | Service port for the main component | `8080` |
 | `main.resources` | Resource requests and limits for the main component | modest requests/limits |

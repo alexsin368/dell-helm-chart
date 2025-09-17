@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Enterprise Inference Values",
+    "description": "A schema to validate the values.yaml file for the Enterprise Inference Helm chart.",
+    "type": "object",
+    "properties": {
+        "replicaCount": {
+            "type": "integer",
+            "default": 1,
+            "description": "Number of replicas to deploy."
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "repository": {
+                    "type": "string",
+                    "description": "Container image repository."
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "Container image tag."
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "enum": ["Always", "IfNotPresent", "Never"],
+                    "default": "IfNotPresent",
+                    "description": "Image pull policy."
+                }
+            },
+            "required": ["repository", "tag"]
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+                    "default": "ClusterIP",
+                    "description": "Type of Kubernetes service."
+                },
+                "port": {
+                    "type": "integer",
+                    "default": 80,
+                    "description": "Port for the service."
+                }
+            }
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string",
+                            "description": "CPU resource limit."
+                        },
+                        "memory": {
+                            "type": "string",
+                            "description": "Memory resource limit."
+                        }
+                    }
+                },
+                "requests": {
+                    "type": "object",
+                    "properties": {
+                        "cpu": {
+                            "type": "string",
+                            "description": "CPU resource request."
+                        },
+                        "memory": {
+                            "type": "string",
+                            "description": "Memory resource request."
+                        }
+                    }
+                }
+            }
+        },
+        "nodeSelector": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            },
+            "description": "Node selector for pod assignment."
+        },
+        "tolerations": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "operator": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "effect": {
+                        "type": "string"
+                    }
+                }
+            },
+            "description": "Tolerations for pod assignment."
+        },
+        "affinity": {
+            "type": "object",
+            "description": "Affinity rules for pod assignment."
+        }
+    },
+    "required": ["replicaCount", "image", "service"]
+}

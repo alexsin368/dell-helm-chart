@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: deploy-models
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: enterpriseinference-sa
+      containers:
+      - name: deploy-models
+        image: {{ .Values.modelServing.image }}
+        command: ["/bin/sh", "-c", "/scripts/deploy-models.sh"]
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        - name: config
+          mountPath: /config
+      restartPolicy: OnFailure
+      volumes:
+      - name: scripts
+        configMap:
+          name: enterpriseinference-scripts
+      - name: config
+        configMap:
+          name: model-serving-config

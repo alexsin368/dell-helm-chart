@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: enterpriseinference-setup
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: enterpriseinference-sa
+      containers:
+      - name: setup
+        image: alpine/git
+        command: ["/bin/sh", "-c", "/scripts/clone-and-setup.sh"]
+        volumeMounts:
+        - name: scripts
+          mountPath: /scripts
+        - name: workspace
+          mountPath: /workspace
+      restartPolicy: OnFailure
+      volumes:
+      - name: scripts
+        configMap:
+          name: enterpriseinference-scripts
+      - name: workspace
+        persistentVolumeClaim:
+          claimName: enterpriseinference-pvc

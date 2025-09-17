@@ -1,0 +1,21 @@
+Thank you for installing the Enterprise Inference Helm Chart!
+
+To access your application, follow these steps:
+
+1. Check the status of your deployment:
+    kubectl get all -n <namespace>
+
+2. Retrieve the service URL:
+    kubectl get svc -n <namespace>
+
+3. If your service is of type LoadBalancer, wait for the external IP to be assigned:
+    kubectl get svc -w -n <namespace>
+
+4. If your service is of type NodePort, use the following command to get the NodePort:
+    kubectl get svc -n <namespace> -o jsonpath='{.spec.ports[0].nodePort}'
+
+5. Access the application using the appropriate URL:
+    - LoadBalancer: http://<external-ip>:<port>
+    - NodePort: http://<node-ip>:<node-port>
+
+For more information, refer to the documentation or contact your administrator.

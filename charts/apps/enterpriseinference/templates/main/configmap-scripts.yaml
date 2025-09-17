@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: enterpriseinference-scripts
+  namespace: {{ .Release.Namespace }}
+data:
+  clone-and-setup.sh: |
+    #!/bin/bash
+    set -e
+    git clone --branch {{ .Values.main.upstream.branch }} {{ .Values.main.upstream.repository }} /workspace/repo
+    cp /workspace/repo/{{ .Values.main.upstream.configPath }} /workspace/config/inference-config.cfg
+    /workspace/repo/scripts/inference-stack-deploy.sh
