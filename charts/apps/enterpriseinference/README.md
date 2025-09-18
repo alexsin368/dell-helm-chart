@@ -29,10 +29,10 @@ helm repo update
 helm install enterprise-inference deh/enterpriseinference \
   --set device=$DEVICE \
   --set main.config.storageClassName=gp2 \
-  --set main.config.clusterUrl="https://inference.dell.local" \
-  --set main.config.models=["1"] \
-  --set main.config.cpuOrGpu="gaudi3" \
-  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
+  --set main.config.clusterUrl="https://inference.dell.local" \
+  --set main.config.models=["1"] \
+  --set main.config.cpuOrGpu="gaudi3" \
+  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
 ```
 
 ### From Local Source
@@ -45,11 +45,11 @@ cd dell-helm-chart
 # Install the chart
 helm install enterprise-inference ./charts/apps/enterpriseinference \
   --set device=$DEVICE \
-  --set main.config.storageClassName=gp2 \
-  --set main.config.clusterUrl="https://inference.dell.local" \
-  --set main.config.models=["1"] \
-  --set main.config.cpuOrGpu="gaudi3" \
-  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
+  --set main.config.storageClassName=gp2 \
+  --set main.config.clusterUrl="https://inference.dell.local" \
+  --set main.config.models=["1"] \
+  --set main.config.cpuOrGpu="gaudi3" \
+  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
 ```
 
 
