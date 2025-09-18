@@ -18,19 +18,19 @@ main:
       # Prerequisites config
       sshKeyName: "id_rsa"  # Name of the SSH key pair
       ipAddress: "127.0.0.1"  # IP address of the machine, default to localhost
-      certsPath: "~/certs"
+      certsPath: "~/certs"  # The directory to place the SSL/TLS certificate and key files
 
       # Inference deployment config
-      certFile: "cert.pem"
-      keyFile: "key.pem"
-      keycloakClientId: "api"
-      keycloakAdminUser: "api-admin"
-      keycloakAdminPassword: "changeme!!"
-      deployKubernetesFresh: "on"
-      deployIngressController: "on"
-      deployKeycloakApisix: "on"
-      deployObservability: "on"
-      deployLlmModels: "on"
+      certFile: "cert.pem"  # The SSL/TLS certificate file
+      keyFile: "key.pem"  # The SSL/TLS key file
+      keycloakClientId: "api"  # Client ID for keycloak, can be left unchanged
+      keycloakAdminUser: "api-admin"  # Admin username for keycloak, can be left unchanged
+      keycloakAdminPassword: "changeme!!"  # Admin password for keycloak, can be left unchanged
+      deployKubernetesFresh: "on"  # Inference stack automation config to deploy Kubernetes
+      deployIngressController: "on"  # Inference stack automation config to deploy the Ingress controller
+      deployKeycloakApisix: "on"  # Inference stack automation config to deploy Keycloak and APISIX
+      deployObservability: "on"  # Inference stack automation config to deploy Prometheus and Grafana
+      deployLlmModels: "on"  # Inference stack automation config to deploy model(s)
 
   upstream:
    repository: "https://github.com/opea-project/Enterprise-Inference"

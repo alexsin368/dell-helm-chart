@@ -12,12 +12,11 @@ TODO
 
 ## Installing the Chart
 
-# Set the device to deploy on, default is "hpu"
+Set the device to deploy on, default is "hpu". Set your Hugging Face token value.
 ```bash
 export DEVICE="hpu" # Options: hpu, cpu
+export HUGGINGFACE_TOKEN="<your-hf-token>"
 ```
-
-> **Note:** For the `helm install` commands, change the value of the Hugging Face token to the desired value before running. For all configurable parameters, see the [Configuration](#configuration) section below.
 
 ### From the Helm Repository
 
@@ -33,7 +32,7 @@ helm install enterprise-inference deh/enterpriseinference \
   --set main.config.clusterUrl="https://inference.dell.local" \
   --set main.config.models=["1"] \
   --set main.config.cpuOrGpu="gaudi3" \
-  --set main.secrets.huggingFaceToken="hf_xxxxx"
+  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
 ```
 
 ### From Local Source
@@ -50,10 +49,8 @@ helm install enterprise-inference ./charts/apps/enterpriseinference \
   --set main.config.clusterUrl="https://inference.dell.local" \
   --set main.config.models=["1"] \
   --set main.config.cpuOrGpu="gaudi3" \
-  --set main.secrets.huggingFaceToken="hf_xxxxx"
+  --set main.secrets.huggingFaceToken=$HUGGINGFACE_TOKEN
 ```
-
-> **Required:** The `main.config.storageClassName` parameter must be specified during installation, as it is required for the persistent volume claim.
 
 
 ## Configuration
