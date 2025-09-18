@@ -4,110 +4,340 @@
     "description": "A schema to validate the values.yaml file for the Enterprise Inference Helm chart.",
     "type": "object",
     "properties": {
-        "replicaCount": {
-            "type": "integer",
-            "default": 1,
-            "description": "Number of replicas to deploy."
+        "nameOverride": {
+            "type": "string",
+            "description": "Override the name of the chart."
         },
-        "image": {
+        "fullnameOverride": {
+            "type": "string",
+            "description": "Override the full name of the chart."
+        },
+        "device": {
+            "type": "string",
+            "enum": ["hpu", "cpu"],
+            "description": "Target device for deployment."
+        },
+        "main": {
             "type": "object",
             "properties": {
-                "repository": {
-                    "type": "string",
-                    "description": "Container image repository."
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable or disable the main component."
                 },
-                "tag": {
-                    "type": "string",
-                    "description": "Container image tag."
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "enum": ["Always", "IfNotPresent", "Never"],
-                    "default": "IfNotPresent",
-                    "description": "Image pull policy."
-                }
-            },
-            "required": ["repository", "tag"]
-        },
-        "service": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
-                    "default": "ClusterIP",
-                    "description": "Type of Kubernetes service."
-                },
-                "port": {
-                    "type": "integer",
-                    "default": 80,
-                    "description": "Port for the service."
-                }
-            }
-        },
-        "resources": {
-            "type": "object",
-            "properties": {
-                "limits": {
+                "config": {
                     "type": "object",
                     "properties": {
-                        "cpu": {
+                        "storageClassName": {
                             "type": "string",
-                            "description": "CPU resource limit."
+                            "description": "Storage class for the PVC."
                         },
-                        "memory": {
+                        "clusterUrl": {
                             "type": "string",
-                            "description": "Memory resource limit."
+                            "description": "The base URL to host the inference endpoint."
+                        },
+                        "models": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            },
+                            "description": "A list of the model numbers from the list of pre-validated models."
+                        },
+                        "cpuOrGpu": {
+                            "type": "string",
+                            "enum": ["cpu", "gpu", "gaudi2", "gaudi3"],
+                            "description": "The target platform to deploy the model."
+                        },
+                        "sshKeyName": {
+                            "type": "string",
+                            "description": "Name of the SSH key pair."
+                        },
+                        "ipAddress": {
+                            "type": "string",
+                            "description": "IP address of the machine."
+                        },
+                        "certsPath": {
+                            "type": "string",
+                            "description": "Path to the certificates."
+                        },
+                        "certFile": {
+                            "type": "string",
+                            "description": "Certificate file name."
+                        },
+                        "keyFile": {
+                            "type": "string",
+                            "description": "Key file name."
+                        },
+                        "keycloakClientId": {
+                            "type": "string",
+                            "description": "Keycloak client ID."
+                        },
+                        "keycloakAdminUser": {
+                            "type": "string",
+                            "description": "Keycloak admin username."
+                        },
+                        "keycloakAdminPassword": {
+                            "type": "string",
+                            "description": "Keycloak admin password."
+                        },
+                        "deployKubernetesFresh": {
+                            "type": "string",
+                            "description": "Deploy Kubernetes fresh configuration."
+                        },
+                        "deployIngressController": {
+                            "type": "string",
+                            "description": "Deploy ingress controller."
+                        },
+                        "deployKeycloakApisix": {
+                            "type": "string",
+                            "description": "Deploy Keycloak with Apisix."
+                        },
+                        "deployObservability": {
+                            "type": "string",
+                            "description": "Deploy observability stack."
+                        },
+                        "deployLlmModels": {
+                            "type": "string",
+                            "description": "Deploy LLM models."
+                        }
+                    },
+                    "required": ["storageClassName", "clusterUrl", "models", "cpuOrGpu"]
+                },
+                "upstream": {
+                    "type": "object",
+                    "properties": {
+                        "repository": {
+                            "type": "string",
+                            "description": "Repository URL for upstream configuration."
+                        },
+                        "branch": {
+                            "type": "string",
+                            "description": "Branch name for upstream configuration."
+                        },
+                        "configPath": {
+                            "type": "string",
+                            "description": "Path to the upstream configuration file."
+                        }
+                    },
+                    "required": ["repository", "branch", "configPath"]
+                },
+                "secrets": {
+                    "type": "object",
+                    "properties": {
+                        "huggingFaceToken": {
+                            "type": "string",
+                            "description": "Hugging Face token to access models."
+                        }
+                    },
+                    "required": ["huggingFaceToken"]
+                },
+                "securityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable or disable security context."
+                        },
+                        "fsGroup": {
+                            "type": "integer",
+                            "description": "Filesystem group ID."
+                        },
+                        "runAsUser": {
+                            "type": "integer",
+                            "description": "User ID to run the application."
+                        },
+                        "runAsGroup": {
+                            "type": "integer",
+                            "description": "Group ID to run the application."
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Run the application as a non-root user."
                         }
                     }
                 },
-                "requests": {
+                "service": {
                     "type": "object",
                     "properties": {
-                        "cpu": {
+                        "type": {
                             "type": "string",
-                            "description": "CPU resource request."
+                            "enum": ["ClusterIP", "NodePort", "LoadBalancer"],
+                            "description": "Type of Kubernetes service."
                         },
-                        "memory": {
+                        "port": {
+                            "type": "integer",
+                            "description": "Port for the service."
+                        }
+                    },
+                    "required": ["type", "port"]
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "hpu": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        },
+                                        "habana.ai/gaudi": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        },
+                                        "habana.ai/gaudi": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "cpu": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable or disable persistence."
+                        },
+                        "size": {
                             "type": "string",
-                            "description": "Memory resource request."
+                            "description": "Size of the persistent volume."
+                        }
+                    },
+                    "required": ["enabled", "size"]
+                }
+            }
+        },
+        "modelServing": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable or disable model serving."
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "port": {
+                            "type": "integer",
+                            "description": "Port for the model serving service."
+                        },
+                        "targetPort": {
+                            "type": "integer",
+                            "description": "Target port for the model serving service."
+                        }
+                    },
+                    "required": ["port", "targetPort"]
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "hpu": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        },
+                                        "habana.ai/gaudi": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        },
+                                        "habana.ai/gaudi": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "cpu": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "properties": {
+                                        "cpu": {
+                                            "type": "string"
+                                        },
+                                        "memory": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
-        },
-        "nodeSelector": {
-            "type": "object",
-            "additionalProperties": {
-                "type": "string"
-            },
-            "description": "Node selector for pod assignment."
-        },
-        "tolerations": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string"
-                    },
-                    "operator": {
-                        "type": "string"
-                    },
-                    "value": {
-                        "type": "string"
-                    },
-                    "effect": {
-                        "type": "string"
-                    }
-                }
-            },
-            "description": "Tolerations for pod assignment."
-        },
-        "affinity": {
-            "type": "object",
-            "description": "Affinity rules for pod assignment."
         }
-    },
-    "required": ["replicaCount", "image", "service"]
+    }
 }

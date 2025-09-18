@@ -29,3 +29,4 @@ Define a template for resource names to ensure consistency.
 
 {{/*
 Define a template for selector labels.
+*/}}
