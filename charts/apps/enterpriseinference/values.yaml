@@ -11,7 +11,7 @@ main:
   config:
     # General config
       storageClassName: "gp2"  # Required: Storage class for the PVC
-      clusterUrl: "api.example.com"  # The base URL to host the inference endpoint
+      clusterUrl: "https://inference.dell.local"  # The base URL to host the inference endpoint
       models: [1]  # A list of the model numbers from the list of pre-validated models
       cpuOrGpu: "gaudi3"  # The target platform to deploy the model [cpu, gpu, gaudi2, gaudi3]
 

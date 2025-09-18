@@ -12,6 +12,11 @@ TODO
 
 ## Installing the Chart
 
+# Set the device to deploy on, default is "hpu"
+```bash
+export DEVICE="hpu" # Options: hpu, cpu
+```
+
 > **Note:** For the `helm install` commands, change the value of the Hugging Face token to the desired value before running. For all configurable parameters, see the [Configuration](#configuration) section below.
 
 ### From the Helm Repository
@@ -23,10 +28,11 @@ helm repo update
 
 # Install the chart
 helm install enterprise-inference deh/enterpriseinference \
-  --set main.config.storageClassName=gp2 \
+  --set device=$DEVICE \
+  --set main.config.storageClassName=gp2 \
   --set main.config.clusterUrl="https://inference.dell.local" \
   --set main.config.models=["1"] \
-  --set main.config.target="gaudi3" \
+  --set main.config.cpuOrGpu="gaudi3" \
   --set main.secrets.huggingFaceToken="hf_xxxxx"
 ```
 
@@ -39,10 +45,11 @@ cd dell-helm-chart
 
 # Install the chart
 helm install enterprise-inference ./charts/apps/enterpriseinference \
+  --set device=$DEVICE \
   --set main.config.storageClassName=gp2 \
   --set main.config.clusterUrl="https://inference.dell.local" \
   --set main.config.models=["1"] \
-  --set main.config.target="gaudi3" \
+  --set main.config.cpuOrGpu="gaudi3" \
   --set main.secrets.huggingFaceToken="hf_xxxxx"
 ```
 
@@ -70,7 +77,7 @@ The following table lists the configurable parameters for the Enterprise Inferen
 | `main.config.storageClassName` | Storage class for persistent data (required) | `gp2` |
 | `main.config.clusterUrl` | The base URL to host the inference endpoint | `https://inference.dell.local` |
 | `main.config.models` | A list of the model numbers from the list of pre-validated models | `[1]` |
-| `main.config.target` | The target platform to deploy the model | `gaudi3` |
+| `main.config.cpuOrGpu` | The target platform to deploy the model | `gaudi3` |
 | `main.secrets.huggingFaceToken` | Hugging Face token to access models | `hf_xxxxx` |
 | `main.service.type` | Service type for the main component | `ClusterIP` |
 | `main.service.port` | Service port for the main component | `8080` |
