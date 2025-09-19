@@ -12,8 +12,10 @@ spec:
       serviceAccountName: enterpriseinference-sa
       containers:
       - name: setup
-        image: alpine/git
-        command: ["/bin/sh", "-c", "/scripts/ei-setup.sh"]
+        image: {{ .Values.main.image }}
+        command: ["/bin/sh", "-c", "/scripts/ei_setup.sh"]
+        resources:
+          {{- toYaml .Values.main.resources | nindent 10 }}
         volumeMounts:
         - name: scripts
           mountPath: /scripts

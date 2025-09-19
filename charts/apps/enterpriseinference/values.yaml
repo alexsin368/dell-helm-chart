@@ -6,7 +6,8 @@ device: "hpu" # Options: hpu, cpu
 ## Enterprise Inference Main Component Settings
 main:
   enabled: true
-  
+  image: "ubuntu:22.04" # Default base image
+
   # User configurable options from app spec
   config:
     # General config
@@ -62,7 +63,7 @@ main:
         memory: "1024Gi"
         habana.ai/gaudi: "8"
       requests:
-        cpu: "40"
+        cpu: "16"
         memory: "16Gi"
         habana.ai/gaudi: "1"
     cpu:
@@ -70,7 +71,7 @@ main:
         cpu: "64"
         memory: "1024Gi"
       requests:
-        cpu: "40"
+        cpu: "16"
         memory: "16Gi"
 
   # Persistent volume claim
@@ -78,31 +79,3 @@ main:
     enabled: true
     size: 10Gi
     # storageClassName is set from config.storageClassName
-
-## Model Serving Component Settings
-modelServing:
-  enabled: false
-
-  # Service configuration
-  service:
-    port: 8500
-    targetPort: 8500
-
-  # Resources for model serving
-    resources:
-    hpu:
-      limits:
-        cpu: "64"
-        memory: "1024Gi"
-        habana.ai/gaudi: "8"
-      requests:
-        cpu: "40"
-        memory: "16Gi"
-        habana.ai/gaudi: "1"
-    cpu:
-      limits:
-        cpu: "64"
-        memory: "1024Gi"
-      requests:
-        cpu: "40"
-        memory: "16Gi"
